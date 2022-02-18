@@ -66,11 +66,9 @@ PriorityQueue<T>::PriorityQueue(const PriorityQueue<T>& queue) {
     Push(current->value, current->priority_);
     current = current->next_;
   }
-  head_ = queue.head_;
   count_of_high_priority = queue.count_of_high_priority;
   count_of_medium_priority = queue.count_of_medium_priority;
   count_of_low_priority = queue.count_of_low_priority;
-  size_ = queue.size_;
 }
 
 template<class T>
@@ -98,6 +96,9 @@ PriorityQueue<T>& PriorityQueue<T>::operator=(
     Push(current->value, current->priority_);
     current = current->next_;
   }
+  count_of_high_priority = queue.count_of_high_priority;
+  count_of_medium_priority = queue.count_of_medium_priority;
+  count_of_low_priority = queue.count_of_low_priority;
   return *this;
 }
 
