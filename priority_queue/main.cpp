@@ -18,6 +18,8 @@ int main() {
   cout << "10: pop element\n";
   cout << "11: queue2 = queue\n";
   cout << "12: queue2 = queue with moving\n";
+  cout << "13: queue3(queue)\n";
+  cout << "14: queue3(queue) with moving\n";
   cout << "0:end work\n";
   do {
     cin >> type;
@@ -89,8 +91,20 @@ int main() {
         //system("pause");
       case 11:
         queue2 = queue;
+        break;
       case 12:
         queue2 = std::move(queue);
+        break;
+      case 13:
+      {
+        PriorityQueue<int> queue3(queue);
+        break;
+      }
+      case 14:
+      {
+        PriorityQueue<int> queue3(std::move(queue));
+        break;
+      }
       default:
         if (type != 0) {
           cout << "Wrong number\n";

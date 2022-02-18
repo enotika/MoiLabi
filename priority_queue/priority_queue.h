@@ -63,7 +63,7 @@ template<class T>
 PriorityQueue<T>::PriorityQueue(const PriorityQueue<T>& queue) {
   Node* current = queue.head_;
   while (current != nullptr) {
-    Push(current->value, current->priority);
+    Push(current->value, current->priority_);
     current = current->next_;
   }
   head_ = queue.head_;
@@ -95,7 +95,7 @@ PriorityQueue<T>& PriorityQueue<T>::operator=(
   Clear();
   Node* current = queue.head_;
   while (current != nullptr) {
-    Push(current->value, current->priority);
+    Push(current->value, current->priority_);
     current = current->next_;
   }
   return *this;
