@@ -6,11 +6,26 @@
 template<class T>
 class PriorityQueue {
  public:
-  struct Node;
   enum class Priority {
     high = 1,
     medium = 2,
     low = 3
+  };
+  //struct Node;
+  struct Node {
+   public:
+    T value;
+    friend class PriorityQueue;
+
+   private:
+    Node* next_{nullptr};
+    Priority priority_{3};
+
+    Node(const T& value, Node* next_, Priority priority) :
+        value(value), next_(next_), priority_(priority) {}
+    Node(T&& value, Node* previous, Node* next_, Priority priority) :
+        value(std::move(value)), next_(next_), priority_(priority) {}
+    Node() = default;
   };
 
  public:
@@ -42,7 +57,7 @@ class PriorityQueue {
   int count_of_low_priority{0};
 };
 
-template<class T>
+/*template<class T>
 struct PriorityQueue<T>::Node {
  public:
   T value;
@@ -57,10 +72,11 @@ struct PriorityQueue<T>::Node {
   Node(T&& value, Node* previous, Node* next_, Priority priority) :
       value(std::move(value)), next_(next_), priority_(priority) {}
   Node() = default;
-};
+};*/
 
 template<class T>
 PriorityQueue<T>::PriorityQueue(const PriorityQueue<T>& queue) {
+  std::cout << "Copy constructor";
   Node* current = queue.head_;
   while (current != nullptr) {
     Push(current->value, current->priority_);
@@ -77,6 +93,7 @@ PriorityQueue<T>::PriorityQueue(PriorityQueue<T>&& queue) noexcept
       count_of_high_priority(queue.count_of_high_priority),
       count_of_medium_priority(queue.count_of_medium_priority),
       count_of_low_priority(queue.count_of_low_priority), size_(queue.size_) {
+  std::cout << "Move constructor";
   queue.head_ = nullptr;
   queue.size_ = 0;
   queue.count_of_high_priority = 0;
@@ -87,6 +104,7 @@ PriorityQueue<T>::PriorityQueue(PriorityQueue<T>&& queue) noexcept
 template<class T>
 PriorityQueue<T>& PriorityQueue<T>::operator=(
     const PriorityQueue<T>& queue) {
+  std::cout << "Assignment operator";
   if (this == &queue) {
     return *this;
   }
@@ -105,6 +123,8 @@ PriorityQueue<T>& PriorityQueue<T>::operator=(
 template<class T>
 PriorityQueue<T>& PriorityQueue<T>::operator=(
     PriorityQueue<T>&& queue) noexcept {
+
+  std::cout << "Move assignment operator";
   if (this == &queue) {
     return *this;
   }
@@ -134,9 +154,10 @@ bool PriorityQueue<T>::IsEmpty() const {
 
 template<class T>
 void PriorityQueue<T>::Push(const T& value, Priority priority) {
+  Node* new_element = new Node(value, head_, priority);
   if (IsEmpty() || (count_of_high_priority == 0 &&
-      (priority == Priority::high || (count_of_medium_priority == 0 && priority == Priority::medium)))) {
-    Node* new_element = new Node(value, head_, priority);
+      (priority == Priority::high || (count_of_medium_priority == 0
+          && priority == Priority::medium)))) {
     head_ = new_element;
     switch (priority) {
       case Priority::high : {
@@ -155,8 +176,29 @@ void PriorityQueue<T>::Push(const T& value, Priority priority) {
     ++size_;
     return;
   }
-  Node* new_element = new Node(value, head_, priority);
+  int countOfSteps = 0;
   switch (priority) {
+    case Priority::high:
+      countOfSteps = count_of_high_priority;
+      ++count_of_high_priority;
+      break;
+    case Priority::medium:
+      countOfSteps = count_of_high_priority + count_of_medium_priority;
+      ++count_of_medium_priority;
+      break;
+    case Priority::low:
+      countOfSteps = size_;
+      ++count_of_low_priority;
+      break;
+  }
+  for (int i = 0; i < countOfSteps - 1; ++i) {
+    new_element->next_ = new_element->next_->next_;
+  }
+  Node* ptr = new_element->next_->next_;
+  new_element->next_->next_ = new_element;
+  new_element->next_ = ptr;
+  ++size_;
+  /*switch (priority) {
     case Priority::high : {
       for (int i = 0; i < count_of_high_priority - 1; ++i) {
         new_element->next_ = new_element->next_->next_;
@@ -191,7 +233,7 @@ void PriorityQueue<T>::Push(const T& value, Priority priority) {
       ++size_;
       break;
     }
-  }
+  }*/
 }
 
 template<class T>
@@ -205,9 +247,11 @@ void PriorityQueue<T>::Pop() {
     }
     case Priority::medium : {
       --count_of_medium_priority;
+      break;
     }
     case Priority::low : {
       --count_of_low_priority;
+      break;
     }
   }
   Node* ptr = head_;
@@ -229,10 +273,10 @@ typename PriorityQueue<T>::Priority PriorityQueue<T>::GetPriorityOfHead() const 
 
 template<class T>
 void PriorityQueue<T>::Push(T&& value, Priority priority) {
+  Node* new_element = new Node(std::move(value), nullptr, priority);
   if (IsEmpty() || (count_of_high_priority == 0 &&
       (priority == Priority::high || (count_of_medium_priority == 0 &&
           (priority == Priority::medium || count_of_low_priority == 0))))) {
-    Node* new_element = new Node(std::move(value), nullptr, priority);
     head_ = new_element;
     switch (priority) {
       case Priority::high : {
@@ -241,16 +285,39 @@ void PriorityQueue<T>::Push(T&& value, Priority priority) {
       }
       case Priority::medium : {
         ++count_of_medium_priority;
+        break;
       }
       case Priority::low : {
         ++count_of_low_priority;
+        break;
       }
     }
     ++size_;
     return;
   }
-  Node* new_element = new Node(std::move(value), head_, priority);
+  int countOfSteps = 0;
   switch (priority) {
+    case Priority::high:
+      countOfSteps = count_of_high_priority;
+      ++count_of_high_priority;
+      break;
+    case Priority::medium:
+      countOfSteps = count_of_high_priority + count_of_medium_priority;
+      ++count_of_medium_priority;
+      break;
+    case Priority::low:
+      countOfSteps = size_;
+      ++count_of_low_priority;
+      break;
+  }
+  for (int i = 0; i < countOfSteps - 1; ++i) {
+    new_element->next_ = new_element->next_->next_;
+  }
+  Node* ptr = new_element->next_->next_;
+  new_element->next_->next_ = new_element;
+  new_element->next_ = ptr;
+  ++size_;
+  /*switch (priority) {
     case Priority::high : {
       for (int i = 0; i < count_of_high_priority - 1; ++i) {
         new_element->next_ = new_element->next_->next_;
@@ -285,7 +352,7 @@ void PriorityQueue<T>::Push(T&& value, Priority priority) {
       ++size_;
       break;
     }
-  }
+  }*/
 }
 
 template<class T>

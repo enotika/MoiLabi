@@ -25,7 +25,8 @@ int main() {
     cin >> type;
     switch (type) {
       int a, priority;
-      case 1:cin >> a >> priority;
+      case 1:
+        cin >> a >> priority;
         switch (priority) {
           case 1 : {
             queue.Push(a, PriorityQueue<int>::Priority::high);
@@ -42,7 +43,8 @@ int main() {
         }
         //system("pause");
         break;
-      case 2:cin >> a >> priority;
+      case 2:
+        cin >> a >> priority;
         switch (priority) {
           case 1 : {
             queue.Push(std::move(a), PriorityQueue<int>::Priority::high);
@@ -59,22 +61,28 @@ int main() {
         }
         //system("pause");
         break;
-      case 3:cout << queue.Size() << endl;
+      case 3:
+        cout << queue.Size() << endl;
         //system("pause");
         break;
-      case 4:cout << queue.GetValueOfHead() << endl;
+      case 4:
+        cout << queue.GetValueOfHead() << endl;
         //system("pause");
         break;
-      case 5:cout << static_cast<int>(queue.GetPriorityOfHead()) << endl;
+      case 5:
+        cout << static_cast<int>(queue.GetPriorityOfHead()) << endl;
         //system("pause");
         break;
-      case 6:cout << queue.GetCountOfHighPriority() << endl;
+      case 6:
+        cout << queue.GetCountOfHighPriority() << endl;
         //system("pause");
         break;
-      case 7:cout << queue.GetCountOfMediumPriority() << endl;
+      case 7:
+        cout << queue.GetCountOfMediumPriority() << endl;
         //system("pause");
         break;
-      case 8:cout << queue.GetCountOfHighPriority() << endl;
+      case 8:
+        cout << queue.GetCountOfLowPriority() << endl;
         //system("pause");
         break;
       case 9:
@@ -95,13 +103,11 @@ int main() {
       case 12:
         queue2 = std::move(queue);
         break;
-      case 13:
-      {
+      case 13: {
         PriorityQueue<int> queue3(queue);
         break;
       }
-      case 14:
-      {
+      case 14: {
         PriorityQueue<int> queue3(std::move(queue));
         break;
       }
