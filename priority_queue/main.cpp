@@ -7,7 +7,7 @@ int main() {
   int type;
   cout << "enter type of request\n";
   cout << "1: push\n";
-  cout << "2: push with moving\n";
+  //cout << "2: push with moving\n";
   cout << "3: getsize\n";
   cout << "4: get front element's value\n";
   cout << "5: get front element's priority\n";
@@ -43,7 +43,7 @@ int main() {
         }
         //system("pause");
         break;
-      case 2:
+      /*case 2:
         cin >> a >> priority;
         switch (priority) {
           case 1 : {
@@ -60,7 +60,7 @@ int main() {
           }
         }
         //system("pause");
-        break;
+        break;*/
       case 3:
         cout << queue.Size() << endl;
         //system("pause");

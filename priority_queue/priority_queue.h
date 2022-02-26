@@ -11,7 +11,6 @@ class PriorityQueue {
     medium = 2,
     low = 3
   };
-  //struct Node;
   struct Node {
    public:
     T value;
@@ -45,7 +44,7 @@ class PriorityQueue {
   [[nodiscard]] int GetCountOfLowPriority() const;
   [[nodiscard]] bool IsEmpty() const;
   void Push(const T& value, Priority priority);
-  void Push(T&& value, Priority priority);
+  //void Push(T&& value, Priority priority);
   void Pop();
   void Clear();
 
@@ -271,7 +270,7 @@ typename PriorityQueue<T>::Priority PriorityQueue<T>::GetPriorityOfHead() const 
   return head_->priority_;
 }
 
-template<class T>
+/*template<class T>
 void PriorityQueue<T>::Push(T&& value, Priority priority) {
   Node* new_element = new Node(std::move(value), nullptr, priority);
   if (IsEmpty() || (count_of_high_priority == 0 &&
@@ -317,7 +316,7 @@ void PriorityQueue<T>::Push(T&& value, Priority priority) {
   new_element->next_->next_ = new_element;
   new_element->next_ = ptr;
   ++size_;
-  /*switch (priority) {
+  *//*switch (priority) {
     case Priority::high : {
       for (int i = 0; i < count_of_high_priority - 1; ++i) {
         new_element->next_ = new_element->next_->next_;
@@ -352,8 +351,8 @@ void PriorityQueue<T>::Push(T&& value, Priority priority) {
       ++size_;
       break;
     }
-  }*/
-}
+  }*//*
+}*/
 
 template<class T>
 PriorityQueue<T>::~PriorityQueue() {
