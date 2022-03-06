@@ -11,12 +11,11 @@ class PriorityQueue {
     medium = 2,
     low = 3
   };
+ private:
   struct Node {
    public:
     T value;
-    friend class PriorityQueue;
 
-   private:
     Node* next_{nullptr};
     Priority priority_{3};
 
@@ -44,7 +43,6 @@ class PriorityQueue {
   [[nodiscard]] int GetCountOfLowPriority() const;
   [[nodiscard]] bool IsEmpty() const;
   void Push(const T& value, Priority priority);
-  //void Push(T&& value, Priority priority);
   void Pop();
   void Clear();
 
@@ -55,23 +53,6 @@ class PriorityQueue {
   int count_of_medium_priority{0};
   int count_of_low_priority{0};
 };
-
-/*template<class T>
-struct PriorityQueue<T>::Node {
- public:
-  T value;
-  friend class PriorityQueue;
-
- private:
-  Node* next_{nullptr};
-  Priority priority_{3};
-
-  Node(const T& value, Node* next_, Priority priority) :
-      value(value), next_(next_), priority_(priority) {}
-  Node(T&& value, Node* previous, Node* next_, Priority priority) :
-      value(std::move(value)), next_(next_), priority_(priority) {}
-  Node() = default;
-};*/
 
 template<class T>
 PriorityQueue<T>::PriorityQueue(const PriorityQueue<T>& queue) {
@@ -197,42 +178,6 @@ void PriorityQueue<T>::Push(const T& value, Priority priority) {
   new_element->next_->next_ = new_element;
   new_element->next_ = ptr;
   ++size_;
-  /*switch (priority) {
-    case Priority::high : {
-      for (int i = 0; i < count_of_high_priority - 1; ++i) {
-        new_element->next_ = new_element->next_->next_;
-      }
-      Node* ptr = new_element->next_->next_;
-      new_element->next_->next_ = new_element;
-      new_element->next_ = ptr;
-      ++count_of_high_priority;
-      ++size_;
-      break;
-    }
-    case Priority::medium : {
-      for (int i = 0;
-           i < count_of_high_priority + count_of_medium_priority - 1; ++i) {
-        new_element->next_ = new_element->next_->next_;
-      }
-      Node* ptr = new_element->next_->next_;
-      new_element->next_->next_ = new_element;
-      new_element->next_ = ptr;
-      ++count_of_medium_priority;
-      ++size_;
-      break;
-    }
-    case Priority::low : {
-      for (int i = 0; i < size_ - 1; ++i) {
-        new_element->next_ = new_element->next_->next_;
-      }
-      Node* ptr = new_element->next_->next_;
-      new_element->next_->next_ = new_element;
-      new_element->next_ = ptr;
-      ++count_of_low_priority;
-      ++size_;
-      break;
-    }
-  }*/
 }
 
 template<class T>
@@ -269,90 +214,6 @@ typename PriorityQueue<T>::Priority PriorityQueue<T>::GetPriorityOfHead() const 
   assert(!IsEmpty());
   return head_->priority_;
 }
-
-/*template<class T>
-void PriorityQueue<T>::Push(T&& value, Priority priority) {
-  Node* new_element = new Node(std::move(value), nullptr, priority);
-  if (IsEmpty() || (count_of_high_priority == 0 &&
-      (priority == Priority::high || (count_of_medium_priority == 0 &&
-          (priority == Priority::medium || count_of_low_priority == 0))))) {
-    head_ = new_element;
-    switch (priority) {
-      case Priority::high : {
-        ++count_of_high_priority;
-        break;
-      }
-      case Priority::medium : {
-        ++count_of_medium_priority;
-        break;
-      }
-      case Priority::low : {
-        ++count_of_low_priority;
-        break;
-      }
-    }
-    ++size_;
-    return;
-  }
-  int countOfSteps = 0;
-  switch (priority) {
-    case Priority::high:
-      countOfSteps = count_of_high_priority;
-      ++count_of_high_priority;
-      break;
-    case Priority::medium:
-      countOfSteps = count_of_high_priority + count_of_medium_priority;
-      ++count_of_medium_priority;
-      break;
-    case Priority::low:
-      countOfSteps = size_;
-      ++count_of_low_priority;
-      break;
-  }
-  for (int i = 0; i < countOfSteps - 1; ++i) {
-    new_element->next_ = new_element->next_->next_;
-  }
-  Node* ptr = new_element->next_->next_;
-  new_element->next_->next_ = new_element;
-  new_element->next_ = ptr;
-  ++size_;
-  *//*switch (priority) {
-    case Priority::high : {
-      for (int i = 0; i < count_of_high_priority - 1; ++i) {
-        new_element->next_ = new_element->next_->next_;
-      }
-      Node* ptr = new_element->next_->next_;
-      new_element->next_->next_ = new_element;
-      new_element->next_ = ptr;
-      ++count_of_high_priority;
-      ++size_;
-      break;
-    }
-    case Priority::medium : {
-      for (int i = 0; i < count_of_high_priority + count_of_medium_priority - 1;
-           ++i) {
-        new_element->next_ = new_element->next_->next_;
-      }
-      Node* ptr = new_element->next_->next_;
-      new_element->next_->next_ = new_element;
-      new_element->next_ = ptr;
-      ++count_of_medium_priority;
-      ++size_;
-      break;
-    }
-    case Priority::low : {
-      for (int i = 0; i < size_ - 1; ++i) {
-        new_element->next_ = new_element->next_->next_;
-      }
-      Node* ptr = new_element->next_->next_;
-      new_element->next_->next_ = new_element;
-      new_element->next_ = ptr;
-      ++count_of_low_priority;
-      ++size_;
-      break;
-    }
-  }*//*
-}*/
 
 template<class T>
 PriorityQueue<T>::~PriorityQueue() {
